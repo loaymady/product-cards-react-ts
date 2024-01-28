@@ -1,7 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 import { IProduct } from "../interfaces";
 import Button from "./ui/Button";
 import Image from "./Image";
 import { numberWithCommas } from "../utils/functions";
+import { memo } from "react";
 
 interface IProps {
   product: IProduct;
@@ -84,4 +86,4 @@ const ProductCard = ({
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);

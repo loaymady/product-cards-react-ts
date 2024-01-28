@@ -1,4 +1,5 @@
-import { Fragment } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import { Fragment, memo } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { categories } from "../../data";
@@ -13,7 +14,7 @@ interface IProps {
   setSelected: (category: ICategory) => void;
 }
 
-export default function Select({ selected, setSelected }: IProps) {
+function Select({ selected, setSelected }: IProps) {
   return (
     <Listbox value={selected} onChange={setSelected}>
       {({ open }) => (
@@ -100,3 +101,5 @@ export default function Select({ selected, setSelected }: IProps) {
     </Listbox>
   );
 }
+
+export default memo(Select);

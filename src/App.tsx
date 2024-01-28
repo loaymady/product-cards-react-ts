@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { v4 as uuid } from "uuid";
 import toast, { Toaster } from "react-hot-toast";
 import ProductCard from "./components/ProductCard";
@@ -5,7 +6,7 @@ import Button from "./components/ui/Button";
 import Input from "./components/ui/Input";
 import Modal from "./components/ui/Modal";
 import { categories, colors, formInputsList, productList } from "./data";
-import { FormEvent, useState } from "react";
+import { FormEvent, useCallback, useState } from "react";
 import { IProduct } from "./interfaces";
 import { validation } from "./validation/validation";
 import ErrorMsg from "./components/ui/ErrorMsg";
@@ -45,37 +46,32 @@ const App = () => {
   //\\   State  \\//
 
   //   Handler  //
-  function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
-    const { value, name } = e.target;
-    setProduct({
-      ...product,
-      [name]: value,
-    });
-    setErrors({
-      ...errors,
-      [name]: "",
-    });
-  }
-  function onChangeEditHandler(e: React.ChangeEvent<HTMLInputElement>) {
-    const { value, name } = e.target;
-    setProductToEdit({
-      ...productToEdit,
-      [name]: value,
-    });
-    setErrors({
-      ...errors,
-      [name]: "",
-    });
-  }
+  const onChangeHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value, name } = e.target;
+      setProduct((prev) => ({ ...prev, [name]: value }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    },
+    []
+  );
 
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
+  const onChangeEditHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value, name } = e.target;
+      setProductToEdit((prev) => ({ ...prev, [name]: value }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    },
+    []
+  );
 
-  const openEditModal = () => setIsOpenEditModal(true);
-  const closeEditModal = () => setIsOpenEditModal(false);
+  const openModal = useCallback(() => setIsOpen(true), []);
+  const closeModal = useCallback(() => setIsOpen(false), []);
 
-  const openConfirmModal = () => setIsOpenConfirmModal(true);
-  const closeConfirmModal = () => setIsOpenConfirmModal(false);
+  const openEditModal = useCallback(() => setIsOpenEditModal(true), []);
+  const closeEditModal = useCallback(() => setIsOpenEditModal(false), []);
+
+  const openConfirmModal = useCallback(() => setIsOpenConfirmModal(true), []);
+  const closeConfirmModal = useCallback(() => setIsOpenConfirmModal(false), []);
 
   function submitHandler(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
@@ -152,18 +148,17 @@ const App = () => {
     });
   }
 
-  function onCancel(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
+  const onCancel = useCallback(() => {
     setProduct(defaultProductObj);
     setTempColor([]);
     closeModal();
-  }
-  function onCancelEditModal(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
+  }, []);
+
+  const onCancelEditModal = useCallback(() => {
     setProductToEdit(defaultProductObj);
     setTempColor([]);
     closeEditModal();
-  }
+  }, []);
 
   function removeProductHandler() {
     const filtered = products.filter(
@@ -186,7 +181,6 @@ const App = () => {
   // \\  Handler  \\//
 
   //   Renders  //
-
   const renderProductList = products.map((product, idx) => (
     <ProductCard
       key={product.id}
@@ -254,11 +248,10 @@ const App = () => {
       }}
     />
   ));
-
   // \\  Renders  \\//
 
   return (
-    <main className=" container">
+    <main className="container">
       <Button
         className="block bg-indigo-700 hover:bg-indigo-800 mx-auto my-10 px-6 font-medium"
         onClick={openModal}
@@ -293,6 +286,7 @@ const App = () => {
               Submit
             </Button>
             <Button
+              type="button"
               className="bg-gray-400 hover:bg-gray-600"
               onClick={onCancel}
             >
@@ -334,6 +328,7 @@ const App = () => {
               Submit
             </Button>
             <Button
+              type="button"
               className="bg-gray-400 hover:bg-gray-600"
               onClick={onCancelEditModal}
             >
@@ -358,6 +353,7 @@ const App = () => {
           </Button>
 
           <Button
+            type="button"
             className="bg-gray-400 hover:bg-gray-600 w-full rounded-lg text-white px-3 py-3 duration-200 font-medium"
             onClick={closeConfirmModal}
           >
